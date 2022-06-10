@@ -5,7 +5,6 @@ const cors = require('cors');
 let users = [];
 
 app.use(cors());
-
 app.use(express.json());
 
 // Get All Users
@@ -18,16 +17,16 @@ app.post('/users', (req,res)=> {
     const user = {
         id: Math.floor(Math.random() * 1000),
         name: req.body.name,
-        age: req.body.age
+        age: req.body.age,
+        education: req.body.education,
+        income: req.body.income
     };
     users.push(user);
     res.json(users);
 });
 
-
 // Get User by ID
 app.get('/users/:id', (req,res)=> {
-
     console.log('Id : ',parseInt(req.params.id));
     const user = users.find(user => user.id === parseInt(req.params.id));
     if(!user) return res.status(404).send('User Not Found');
@@ -36,28 +35,28 @@ app.get('/users/:id', (req,res)=> {
 
 // Update User by id
 app.put('/users/:id', (req,res)=> {
-
     const user = users.find(user => user.id === parseInt(req.params.id));
     if(!user) return res.status(404).send('User Not Found');
-
     user.name = req.body.name;
     user.age = req.body.age;
-
+    user.education = req.body.education;
+    user.income = req.body.income;
     res.json(users);
 });
 
-
 // Delete User by id
 app.delete('/users/:id',(req,res)=>{
-
     const user = users.find(user => user.id === parseInt(req.params.id));
     if(!user) return res.status(404).send('User Not Found');
-
     const index = users.indexOf(user);
     users.splice(index,1);
-
     res.json(users);
+});
 
+// Delete All Users
+app.delete('/all-users',(req,res)=>{
+    users = [];
+    res.json(users);
 });
 
 app.listen(3001,()=>{
